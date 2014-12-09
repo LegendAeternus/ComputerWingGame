@@ -4,6 +4,7 @@
  */
 package xwing;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -15,6 +16,9 @@ import java.util.ArrayList;
  */
 public class GameMap extends javax.swing.JPanel {
    
+    Point size = new Point(914.4,914.4);
+    double scale = 1;
+    
     
     ArrayList<Ship> ships = new ArrayList<>();
     
@@ -28,21 +32,19 @@ public class GameMap extends javax.swing.JPanel {
     
    @Override
     protected void paintComponent(Graphics g) {
+       drawBackground(g);
+       
+        if(null != GameManager.selectedShip) {
+           RangeArea area = new RangeArea(GameManager.selectedShip);
+           area.draw(g);
+       }
+       
        for(Ship s: GameManager.getShips()) {
-           drawShip(s,g);
+           s.draw(g);
        }
 
+
     }
-   
-   public void drawShip(Ship ship, Graphics g) {
-       Graphics2D g2D = (Graphics2D) g;
-       g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-       try {
-        g2D.fill(ship.baseDraw);
-       } catch (java.lang.NullPointerException ex) {
-           
-       }
-   }
 
     
     
@@ -57,18 +59,46 @@ public class GameMap extends javax.swing.JPanel {
     private void initComponents() {
 
         setBackground(new java.awt.Color(0, 0, 0));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 403, Short.MAX_VALUE)
+            .addGap(0, 548, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 298, Short.MAX_VALUE)
+            .addGap(0, 361, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        java.awt.geom.Point2D.Double point = new java.awt.geom.Point2D.Double(evt.getX(),evt.getY());
+        
+        for(Ship s: GameManager.ships) {
+            if (s.baseDraw.contains(point)) {
+                GameManager.selectedShip = s;
+                return;
+            }
+        }
+        GameManager.selectedShip = null;
+        
+        
+    }//GEN-LAST:event_formMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    private void drawBackground(Graphics g) {
+        int width = (int)(size.x * scale);
+        int height = (int)(size.y * scale);
+        this.setSize(width,height);
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, width, height);
+    }
 }

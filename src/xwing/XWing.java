@@ -20,9 +20,11 @@ public class XWing {
      */
     public static void main(String[] args) throws InterruptedException {
         
-        Ship wing = new Ship(new Point(350,250), 15, 79.9);
-        Ship wing2 = new Ship(new Point(400,300), 99, 39.9);
-        Ship wing3 = new Ship(new Point(490,300), 166, 79.9);
+        Ship wing = new LargeShip(250,600,0,1);
+        wing.secondaryArc = true;
+        wing.pilotName = "Boba Fett";
+        Ship wing2 = new NormalShip(400,300, 99,1);
+        Ship wing3 = new LargeShip(490,300, 166,2);
 
         GameManager.addShip(wing);
         GameManager.addShip(wing2);
@@ -43,7 +45,7 @@ public class XWing {
             }
 
             Manuever move = new Manuever(new TwoTurn(), 1);
-            Manuever move2 = new Manuever(new OneTurn(), 1);
+            Manuever move2 = new Manuever(new ThreeTurn(), 1);
             Manuever move3 = new Manuever(new OneBank(), 1);
 
             

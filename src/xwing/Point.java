@@ -31,10 +31,14 @@ public class Point {
     }
     
     public Point rotate(double angleDeg) {
-        double yT = Math.sin(Math.toRadians(angleDeg)) * y - Math.cos(Math.toRadians(angleDeg)) * x;
-        double xT = Math.cos(Math.toRadians(angleDeg)) * y + Math.sin(Math.toRadians(angleDeg)) * x;
+        double yT = Math.cos(Math.toRadians(angleDeg)) * y + Math.sin(Math.toRadians(angleDeg)) * x;
+        double xT = - Math.sin(Math.toRadians(angleDeg)) * y + Math.cos(Math.toRadians(angleDeg)) * x;
         
         return new Point(xT,yT);
+    }
+    
+    public double length() {
+        return Math.sqrt(x*x + y*y);
     }
     
 }

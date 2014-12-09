@@ -78,10 +78,11 @@ public class Manuever {
         Point center = front.add(back).divide(2);
         
         center.x = center.x*(double)direction;
+        Point centerCorrect = new Point(center.y, -center.x);
         
         double angle = Math.toDegrees(Math.atan2(front.x-back.x,front.y-back.y));
         
-        ship.setLocation(center.rotate(ship.orientation).add(ship.location));
+        ship.setLocation(centerCorrect.rotate(ship.orientation).add(ship.location));
         ship.rotate(angle * -(double)direction);
 
     }

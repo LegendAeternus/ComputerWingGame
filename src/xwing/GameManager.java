@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class GameManager {
     
     static ArrayList<Ship> ships = new ArrayList<>();
-   
+    static Ship selectedShip;
     
     static public ArrayList<Ship> getShips() {
         return ships;
