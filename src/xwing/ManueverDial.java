@@ -27,9 +27,9 @@ public class ManueverDial extends javax.swing.JPanel {
         initComponents();
         createMoveMap();
         try {
-            template = ImageIO.read(new File("xwing-manuevers.png"));
+            template = ImageIO.read(new File("resources" + System.getProperty("file.separator") + "xwing-manuevers.png"));
         } catch (IOException e) {
-            System.out.println("cpidasd;kf");
+            System.out.println("Unable to load template image");
         }
         
         
