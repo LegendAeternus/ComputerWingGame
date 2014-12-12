@@ -32,10 +32,12 @@ public class Ship {
     
     
     double arcWidth;
-    double maxHull, maxShields;
-    double hull, shields;
-    double attack, evade;
+    int maxHull, maxShields;
+    int hull, shields;
+    int attack, evade;
     double sideLength;
+    
+    String upgrades;
     
     int team;
     
@@ -97,7 +99,7 @@ public class Ship {
                 Area s2 = new Area(s.baseDraw);
                 s1.subtract(s2);
                 if(!s1.equals(new Area(baseDraw))) {
-                    System.out.println("COLISION");
+                    //System.out.println("COLISION");
                     return true;
                 }
             }

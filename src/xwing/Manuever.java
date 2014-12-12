@@ -17,6 +17,7 @@ public class Manuever {
     
     ManueverShape shape;
     int manueverDirection;
+    boolean kTurn;
     boolean animation = true;
     double animDuration = 2;
     int animFPS = 60;
@@ -52,6 +53,8 @@ public class Manuever {
         
         
         if(ship.checkForShipCollision() == false) {
+            if(kTurn)
+                ship.rotate(180);
             return outcome;
         }
         
@@ -66,6 +69,8 @@ public class Manuever {
             
             transformShipPositionAndRotation(percent, ship, shape, manueverDirection);
         }
+       
+        
         
         return outcome;
     }

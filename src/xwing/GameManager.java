@@ -12,15 +12,27 @@ import java.util.ArrayList;
  */
 public class GameManager {
     
-    static ArrayList<Ship> ships = new ArrayList<>();
+    static ArrayList<Ship> playerSquadron = new ArrayList<>();
+    static ArrayList<Ship> opponentSquadron = new ArrayList<>();
     static Ship selectedShip;
+    static Manuever ManueverToExecute;
+    static Ship listSelectedShip;
+    
+    enum GamePhase {
+        Movement,
+        Attack,
+        Actions,
+        SquadBuilding
+    }
+    
+    static GamePhase curPhase = GamePhase.SquadBuilding;
     
     static public ArrayList<Ship> getShips() {
-        return ships;
+        return playerSquadron;
     }
     
     static public void addShip(Ship s) {
-        ships.add(s);
+        playerSquadron.add(s);
     }
     
     
