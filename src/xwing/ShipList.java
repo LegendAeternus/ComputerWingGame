@@ -16,7 +16,6 @@ import javax.swing.DefaultListModel;
 public class ShipList extends javax.swing.JPanel {
 
     int tempSelectedIndex = -1;
-    XWingGUI gui;
     ShipForm form;
 
     /**
@@ -34,9 +33,6 @@ public class ShipList extends javax.swing.JPanel {
         
     }
     
-    public void setGUI(XWingGUI g) {
-        gui = g;
-    }
     
     public void loadList() {
         

@@ -7,6 +7,7 @@ package xwing;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Timer;
+import javax.swing.JLabel;
 
 /**
  *
@@ -14,6 +15,8 @@ import java.util.Timer;
  */
 public class XWingGUI extends javax.swing.JFrame {
 
+    
+    MainGameplayPanel main;
     
     /**
      * Creates new form XWingGUI
@@ -26,10 +29,10 @@ public class XWingGUI extends javax.swing.JFrame {
 
         initComponents();
         
-        this.shipList1.gui = this;
-        this.shipList1.form = shipForm1;
-        this.gameMap1.l = shipList1;
-        this.shipForm1.l = shipList1;
+        this.jLayeredPane1.setLayer(mainMenuPanel1,2);
+
+        
+
     }
     
     /*protected void paintComponent(Graphics g) {
@@ -49,87 +52,30 @@ public class XWingGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        manueverDial1 = new xwing.ManueverDial();
-        jButton1 = new javax.swing.JButton();
-        gameMap1 = new xwing.GameMap();
-        shipList1 = new xwing.ShipList();
-        shipForm1 = new xwing.ShipForm();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        mainGameplayPanel1 = new xwing.MainGameplayPanel();
+        mainMenuPanel1 = new xwing.MainMenuPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Start");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout manueverDial1Layout = new javax.swing.GroupLayout(manueverDial1);
-        manueverDial1.setLayout(manueverDial1Layout);
-        manueverDial1Layout.setHorizontalGroup(
-            manueverDial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        manueverDial1Layout.setVerticalGroup(
-            manueverDial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manueverDial1Layout.createSequentialGroup()
-                .addGap(0, 261, Short.MAX_VALUE)
-                .addComponent(jButton1))
-        );
-
-        gameMap1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        gameMap1.setPreferredSize(new java.awt.Dimension(914, 914));
-
-        javax.swing.GroupLayout gameMap1Layout = new javax.swing.GroupLayout(gameMap1);
-        gameMap1.setLayout(gameMap1Layout);
-        gameMap1Layout.setHorizontalGroup(
-            gameMap1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1008, Short.MAX_VALUE)
-        );
-        gameMap1Layout.setVerticalGroup(
-            gameMap1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 903, Short.MAX_VALUE)
-        );
-
-        shipList1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        shipForm1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        mainGameplayPanel1.setBounds(0, 0, 1330, 940);
+        jLayeredPane1.add(mainGameplayPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        mainMenuPanel1.setBounds(0, 0, 1330, 940);
+        jLayeredPane1.add(mainMenuPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(gameMap1, javax.swing.GroupLayout.PREFERRED_SIZE, 1012, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(shipForm1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(shipList1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(manueverDial1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1337, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(shipList1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(shipForm1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(manueverDial1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(gameMap1, javax.swing.GroupLayout.PREFERRED_SIZE, 907, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 27, Short.MAX_VALUE))
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        GameManager.curPhase = GameManager.GamePhase.Movement;
-    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -166,10 +112,8 @@ public class XWingGUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private xwing.GameMap gameMap1;
-    private javax.swing.JButton jButton1;
-    private xwing.ManueverDial manueverDial1;
-    private xwing.ShipForm shipForm1;
-    private xwing.ShipList shipList1;
+    private javax.swing.JLayeredPane jLayeredPane1;
+    private xwing.MainGameplayPanel mainGameplayPanel1;
+    private xwing.MainMenuPanel mainMenuPanel1;
     // End of variables declaration//GEN-END:variables
 }

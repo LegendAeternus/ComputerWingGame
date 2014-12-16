@@ -16,39 +16,53 @@ import java.util.logging.Logger;
  *
  * @author Michael
  */
-public class HostGame implements Runnable{
+public class HostGame extends NetworkedGame{
 
-    DatagramSocket rcvrSock;
-    NetworkInterface netInt;
+    DatagramSocket socket;
     
-    public HostGame(int port, NetworkInterface netI) {
-        netInt = netI;
-    
-        try {
-            rcvrSock = new DatagramSocket(port);
-        } catch ( SocketException ex ) {
-            Logger.getLogger(HostGame.class.getName()).log(Level.SEVERE, null,
-                                                           ex);
-        }
+    public HostGame(int destinationPort, int listeningPort) {      
+        super(destinationPort, listeningPort);
+
+        initialize();
+        
         
     }
-
-    @Override
-    public void run () {
+    
+    public void initialize() {
         
-        while(true) {
-            byte[] buffer = new byte[2000];
+        long timeout = 1000000; //Millis
+        long sleep = 100; //Millis
+        long time = 0; //Seconds
+        
+        while(time<timeout) {
+                                        System.out.println("Host Thread Running");
 
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            try {
-                rcvrSock.receive(packet);
-                netInt.rcvr.add(packet);
-                System.out.println("Received");
-            } catch ( IOException ex ) {
-                Logger.getLogger(HostGame.class.getName()).log(Level.SEVERE, null,
-                                                               ex);
+            //ConnectionPacket data = new ConnectionPacket(ConnectionPacket.HOST);   
+            //byte buffer[] = data.getByteArray().getRawBuffer();
+            
+            //DatagramPacket connectionTest = new DatagramPacket(data.getByteArray().getRawBuffer(), data.getByteArray().size(), targetIp, socket.getLocalPort());
+            //packetSender.sendPacket(connectionTest);
+            
+            int cutoff = 100;
+            int coff = 0;
+            while(packetReceiver.getPackets().size() > 0 && coff < cutoff) {
+                System.out.println("Packets Received");
+                coff++;
+                PacketParser.parsePacket(packetReceiver.getPackets().pop());
             }
+            
+            try {
+                Thread.sleep(sleep);
+            } catch ( InterruptedException ex ) {
+                Logger.getLogger(RemoteGame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            time+=sleep;
         }
+        
+        System.out.println("TIME OUT");
+
+        
+        
     }
     
 }

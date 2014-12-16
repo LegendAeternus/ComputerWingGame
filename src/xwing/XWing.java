@@ -4,6 +4,7 @@
  */
 package xwing;
 
+import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,15 +35,47 @@ public class XWing {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
         
-       
+       /*
         
-                    NetworkInterface netInterface = new NetworkInterface();
+        int port = 18290;
+        InetAddress targetIp = null;
+        DatagramSocket sock = null;
+        try {
+            sock = new DatagramSocket(port);
+            targetIp = InetAddress.getByName("127.0.0.1");
 
+        } catch ( SocketException ex ) {
+            Logger.getLogger(XWing.class.getName()).log(Level.SEVERE, null, ex);
+        } catch ( UnknownHostException ex ) {
+            Logger.getLogger(XWing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        PacketReceiver s = new PacketReceiver(sock);
+        //PacketSender send = new PacketSender(sock);
+        
+        Thread t1 = new Thread(s);
+        //Thread t2 = new Thread(send);
+        
+        t1.start();
+        //t2.start();
+        
+            ConnectionPacket data = new ConnectionPacket(ConnectionPacket.REMOTE);   
+            byte buffer[] = data.getByteArray().getRawBuffer();
+            
+            DatagramPacket connectionTest = new DatagramPacket(data.getByteArray().getRawBuffer(), data.getByteArray().size(), targetIp, 18290);//socket.getLocalPort());
+            //send.sendPacket(connectionTest);
+            
+            Thread.sleep(1000);
+            System.out.println(s.getPackets().size());
+        
+        
+        RemoteGame r = new RemoteGame(port+1,"127.0.0.1");
+        
+*/
                     
                     
         while(true) {
             
-            netInterface.send();
             Thread.sleep(10);
             
             if(GameManager.selectedShip != null && GameManager.ManueverToExecute != null) {

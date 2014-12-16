@@ -16,45 +16,56 @@ import java.util.logging.Logger;
  *
  * @author Michael
  */
-public class RemoteGame implements Runnable{
-
-    DatagramSocket sendSock;
-    //String hostingIp = "192.168.1.204";
-    String hostIp = "127.0.0.1";
-    InetAddress hostAddr;
-    NetworkInterface netInt;
+public class RemoteGame extends NetworkedGame{
     
-    public RemoteGame(int port, NetworkInterface netI) {
-        
-        netInt = netI;
-        
+    public RemoteGame(int destinationPort, int listeningPort, String targetIp) {      
+        super(destinationPort, listeningPort);
         try {
-            sendSock = new DatagramSocket();
-        } catch ( SocketException ex ) {
-            Logger.getLogger(RemoteGame.class.getName()).log(Level.SEVERE, null, ex);
+            this.targetIp = InetAddress.getByName(targetIp);
+        } catch ( UnknownHostException ex ) {
+            Logger.getLogger(RemoteGame.class.getName()).log(Level.SEVERE, null,ex);
         }
+
+        initialize();
+        
         
     }
-
-    @Override
-    public void run () {
+    
+    public void initialize() {
         
-        while(true) {
-            byte[] buffer = new byte[2000];
-
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-
-            try {
-                if(netInt.send.size() > 0) {
-                    sendSock.send(netInt.send.remove(netInt.send.size()-1));
-                    System.out.println("SendingPacket  " + netInt.send.size());
-
-                }
-            } catch ( IOException ex ) {
-                Logger.getLogger(RemoteGame.class.getName()).log(Level.SEVERE, null,
-                                                               ex);
+        long timeout = 1000000; //Millis
+        long sleep = 100; //Millis
+        long time = 0; //Seconds
+        
+        while(time<timeout) {
+            
+            System.out.println("Attempting to connect from remote " + time);
+            
+            ConnectionPacket data = new ConnectionPacket(ConnectionPacket.REMOTE);   
+            byte buffer[] = data.getByteArray().getRawBuffer();
+            
+            DatagramPacket connectionTest = new DatagramPacket(data.getByteArray().getRawBuffer(), data.getByteArray().size(), targetIp, 18290);//socket.getLocalPort());
+            packetSender.sendPacket(connectionTest);
+            
+            int cutoff = 100;
+            int coff = 0;
+            while(packetReceiver.getPackets().size() > 0 && coff > cutoff) {
+                coff++;
+                PacketParser.parsePacket(packetReceiver.getPackets().pop());
             }
+            
+            try {
+                Thread.sleep(sleep);
+            } catch ( InterruptedException ex ) {
+                Logger.getLogger(RemoteGame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            time+=sleep;
         }
+        
+        System.out.println("TIME OUT");
+
+        
+        
     }
     
 }

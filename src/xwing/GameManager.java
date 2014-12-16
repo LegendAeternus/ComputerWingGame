@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public class GameManager {
     
+    static NetworkedGame onlineGame;
+    
     static ArrayList<Ship> playerSquadron = new ArrayList<>();
     static ArrayList<Ship> opponentSquadron = new ArrayList<>();
     static Ship selectedShip;
