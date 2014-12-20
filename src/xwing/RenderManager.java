@@ -12,15 +12,13 @@ import java.util.TimerTask;
  */
 public class RenderManager extends TimerTask{
 
-    XWingGUI gui;
-    public RenderManager(XWingGUI gui) {
-        this.gui = gui;
+    public RenderManager() {
     }
     
     
     @Override
     public void run() {
-        gui.repaint();
+        GuiManager.mainWindow.showPhase(GameManager.curPhase);
+        GuiManager.mainWindow.refresh();
     }
-    
 }

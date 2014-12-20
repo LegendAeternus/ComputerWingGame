@@ -20,14 +20,15 @@ import java.util.logging.Logger;
  */
 public class PacketSender implements Runnable{
 
-    
+    int interval; //Milliseconds between checking for new packets to send.
     DatagramSocket socket;
     LinkedList<DatagramPacket> packetsToSend = new LinkedList<>();
 
     
-    public PacketSender(DatagramSocket sock) {
+    public PacketSender(DatagramSocket sock, int loopsPerSecond) {
         
         socket = sock;
+        interval = (int) (1.0/(double)loopsPerSecond);
         
     }
 
@@ -36,13 +37,24 @@ public class PacketSender implements Runnable{
         
         while(true) {
             
+            //=== Send Packets ===
             while(packetsToSend.size() > 0) {
                 try {
                     socket.send(packetsToSend.pop());
+                    System.out.println("Send Packet");
+                    //System.out.println("sent packet");
                 } catch ( IOException ex ) {
                     Logger.getLogger(PacketSender.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }  
+            } 
+            
+            //=== Wait before executing loop again ===
+            try {
+                Thread.sleep(interval);
+            } catch ( InterruptedException ex ) {
+                Logger.getLogger(PacketSender.class.getName()).
+                        log(Level.SEVERE, null, ex);
+            }
         }   
     }
     

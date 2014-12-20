@@ -41,6 +41,7 @@ public class GameMap extends javax.swing.JPanel {
        drawBackground(g);
        
         if(null != GameManager.selectedShip) {
+            System.out.println("Here");
            RangeArea area = new RangeArea(GameManager.selectedShip);
            area.draw(g);
        }

@@ -80,13 +80,12 @@ public class MainMenuPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ConnectToHostButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ConnectToHostButtonMouseClicked
-        
-        GameManager.onlineGame = new RemoteGame(12745, 12746,"127.0.0.1");
-
+  
+        NetworkManager.initializeAsRemote();
     }//GEN-LAST:event_ConnectToHostButtonMouseClicked
 
     private void HostGameButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HostGameButtonMouseClicked
-        GameManager.onlineGame = new HostGame(12746, 12745);
+        NetworkManager.initializeAsHost();
     }//GEN-LAST:event_HostGameButtonMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

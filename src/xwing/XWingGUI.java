@@ -4,10 +4,13 @@
  */
 package xwing;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 
 /**
  *
@@ -15,33 +18,87 @@ import javax.swing.JLabel;
  */
 public class XWingGUI extends javax.swing.JFrame {
 
+    final static int topLayer = 5;
+    static GameManager.GamePhase curPhase;
     
-    MainGameplayPanel main;
     
     /**
      * Creates new form XWingGUI
      */
     public XWingGUI() {
-        RenderManager rm = new RenderManager(this);
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(rm, 0, 16);
-        
 
         initComponents();
+        initRenderManager(60);
         
-        this.jLayeredPane1.setLayer(mainMenuPanel1,2);
-
-        
-
     }
     
-    /*protected void paintComponent(Graphics g) {
-        //super.paintComponents(g);
-        //this.shipList1.loadList();
-        
-        
-    }*/
+    public static void showPhase(GameManager.GamePhase phase) {
 
+        if(curPhase != phase) {
+
+            curPhase = phase;
+            
+            resetMainGui();
+
+            switch(phase) {
+
+                case MainMenu:
+                    mainGuiContainer.setLayer(startupMenu,topLayer);
+                    startupMenu.setVisible(true);
+                    break;
+                case SquadBuilding:
+                    mainGuiContainer.setLayer(gameMap, topLayer);
+                    gameMap.setVisible(true);
+
+                default:
+
+            }    
+        }
+    }
+
+
+    public static void resetMainGui() {
+        for(Component comp: mainGuiContainer.getComponents()) {
+            mainGuiContainer.setLayer(comp, 0);
+            comp.setVisible(false);
+        }
+    }
+
+   
+    /**
+     * An initialization method used to start the render manager at a target fps
+     * @param targetFps the target frame rate. This is the maximum frame rate the
+     *                  visual will be rendered at
+     */
+    private void initRenderManager(int targetFps) {
+        long timeDelay = Math.round(1000d/(double)targetFps);
+        RenderManager rm = new RenderManager();
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(rm, 0, timeDelay);
+    }
+
+    public static MainGameplayPanel getGameMap() {
+        return gameMap;
+    }
+
+    public static JLayeredPane getMainGuiContainer() {
+        return mainGuiContainer;
+    }
+
+    public static MainMenuPanel getStartupMenu() {
+        return startupMenu;
+    }
+    
+    public void refresh() {
+        
+        for(Component comp: mainGuiContainer.getComponentsInLayer(topLayer)) {
+            comp.repaint();
+        }
+        
+        
+        
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,26 +109,26 @@ public class XWingGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLayeredPane1 = new javax.swing.JLayeredPane();
-        mainGameplayPanel1 = new xwing.MainGameplayPanel();
-        mainMenuPanel1 = new xwing.MainMenuPanel();
+        mainGuiContainer = new javax.swing.JLayeredPane();
+        gameMap = new xwing.MainGameplayPanel();
+        startupMenu = new xwing.MainMenuPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        mainGameplayPanel1.setBounds(0, 0, 1330, 940);
-        jLayeredPane1.add(mainGameplayPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        mainMenuPanel1.setBounds(0, 0, 1330, 940);
-        jLayeredPane1.add(mainMenuPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        gameMap.setBounds(0, 0, 1330, 940);
+        mainGuiContainer.add(gameMap, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        startupMenu.setBounds(0, 0, 1330, 940);
+        mainGuiContainer.add(startupMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1337, Short.MAX_VALUE)
+            .addComponent(mainGuiContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 1337, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE)
+            .addComponent(mainGuiContainer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE)
         );
 
         pack();
@@ -112,8 +169,8 @@ public class XWingGUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLayeredPane jLayeredPane1;
-    private xwing.MainGameplayPanel mainGameplayPanel1;
-    private xwing.MainMenuPanel mainMenuPanel1;
+    private static xwing.MainGameplayPanel gameMap;
+    private static javax.swing.JLayeredPane mainGuiContainer;
+    private static xwing.MainMenuPanel startupMenu;
     // End of variables declaration//GEN-END:variables
 }

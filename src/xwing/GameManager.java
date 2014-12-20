@@ -21,13 +21,14 @@ public class GameManager {
     static Ship listSelectedShip;
     
     enum GamePhase {
+        MainMenu,
         Movement,
         Attack,
         Actions,
         SquadBuilding
     }
     
-    static GamePhase curPhase = GamePhase.SquadBuilding;
+    static GamePhase curPhase = GamePhase.MainMenu;
     
     static public ArrayList<Ship> getShips() {
         return playerSquadron;

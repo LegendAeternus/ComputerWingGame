@@ -20,15 +20,16 @@ import java.util.logging.Logger;
  */
 public class PacketReceiver implements Runnable {
 
-    
+    int interval; //Milliseconds between checking for new packets to send.
     DatagramSocket socket;
     LinkedList<DatagramPacket> packetsReceived = new LinkedList<>();
 
     
-    public PacketReceiver(DatagramSocket sock) {
+    public PacketReceiver(DatagramSocket sock, int loopsPerSecond) {
         
         socket = sock;
-        
+        interval = (int) (1.0/(double)loopsPerSecond);
+    
     }
     
 
@@ -36,32 +37,41 @@ public class PacketReceiver implements Runnable {
     public void run () {
         
         while(true) {
+            //System.out.println("Trying to receive Packets");
+            
+            receivePackets();
+                        
+            //=== Wait before executing loop again ===
             try {
-                Thread.sleep(10);
+                Thread.sleep(interval);
             } catch ( InterruptedException ex ) {
-                Logger.getLogger(PacketReceiver.class.getName()).
-                        log(Level.SEVERE, null, ex);
-            }
-
-            
-            byte[] buffer = new byte[2000];
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                
-            try {
-                socket.receive(packet);
-                if(packet.getLength() > 0) {
-                    packetsReceived.add(packet);
-                }
-                
-            } catch ( IOException ex ) {
                 Logger.getLogger(PacketSender.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            System.out.println("Packets Received");
-
+            }   
         }   
     }
         
+    
+    
+    private void receivePackets() {
+
+        //=== Create packet buffer ===
+        byte[] buffer = new byte[2000];
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
+        
+        //=== Look for incoming packets ===
+        try {
+            socket.receive(packet);
+            if(packet.getLength() > 0) {
+                packetsReceived.add(packet);
+                //System.out.println("Received Packet");
+            }    
+        } catch ( IOException ex ) {
+            Logger.getLogger(PacketSender.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     public LinkedList<DatagramPacket> getPackets() {
         return packetsReceived;
     }

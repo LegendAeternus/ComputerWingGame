@@ -21,7 +21,7 @@ public class RemoteGame extends NetworkedGame{
     public RemoteGame(int destinationPort, int listeningPort, String targetIp) {      
         super(destinationPort, listeningPort);
         try {
-            this.targetIp = InetAddress.getByName(targetIp);
+            this.destIp = InetAddress.getByName(targetIp);
         } catch ( UnknownHostException ex ) {
             Logger.getLogger(RemoteGame.class.getName()).log(Level.SEVERE, null,ex);
         }
@@ -37,21 +37,29 @@ public class RemoteGame extends NetworkedGame{
         long sleep = 100; //Millis
         long time = 0; //Seconds
         
-        while(time<timeout) {
+        boolean stop = false;
+        
+        while(time<timeout && !stop) {
             
-            System.out.println("Attempting to connect from remote " + time);
+            //System.out.println("Attempting to connect from remote " + time);
             
-            ConnectionPacket data = new ConnectionPacket(ConnectionPacket.REMOTE);   
-            byte buffer[] = data.getByteArray().getRawBuffer();
-            
-            DatagramPacket connectionTest = new DatagramPacket(data.getByteArray().getRawBuffer(), data.getByteArray().size(), targetIp, 18290);//socket.getLocalPort());
-            packetSender.sendPacket(connectionTest);
+            sendConnectionPacket(ConnectionPacket.REMOTE);
             
             int cutoff = 100;
             int coff = 0;
-            while(packetReceiver.getPackets().size() > 0 && coff > cutoff) {
+            while(packetReceiver.getPackets().size() > 0 && coff < cutoff) {
                 coff++;
-                PacketParser.parsePacket(packetReceiver.getPackets().pop());
+                System.out.println("Received Packet");
+
+                ConnectionPacket data = (ConnectionPacket)ConnectionPacket.parsePacket(packetReceiver.getPackets().pop());
+                if(data!=null && data.source == ConnectionPacket.HOST) {
+                    System.out.println("Connection Established");
+
+                    GameManager.curPhase = GameManager.GamePhase.SquadBuilding;
+                    packetReceiver.packetsReceived.clear();
+                    stop = true;
+
+                }
             }
             
             try {

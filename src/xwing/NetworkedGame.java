@@ -22,10 +22,10 @@ public class NetworkedGame {
     
     static boolean connected = false;
     
-    DatagramSocket destSocket;
-    DatagramSocket listenSocket;
+    int destPort;
+    DatagramSocket localSocket;
 
-    InetAddress targetIp;    
+    InetAddress destIp;    
     
     PacketSender packetSender;
     PacketReceiver packetReceiver;
@@ -37,26 +37,41 @@ public class NetworkedGame {
      * @param port yeah its a port
      * @param netI why do you care
      */
-    public NetworkedGame(int destinationPort, int listeningPort) {
+    public NetworkedGame(int localPort, int destinationPort) {
     
-        
+        destPort = destinationPort;
+
         try {
-            destSocket = new DatagramSocket(destinationPort);
-            listenSocket = new DatagramSocket(listeningPort);
+            localSocket = new DatagramSocket(localPort);
         } catch ( SocketException ex ) {
             Logger.getLogger(HostGame.class.getName()).log(Level.SEVERE, null, ex);
         }
               
-        packetSender = new PacketSender(destSocket);
-        packetReceiver = new PacketReceiver(listenSocket);
+        int loopsPerSecond = 10;
+        packetSender = new PacketSender(localSocket, loopsPerSecond);
+        packetReceiver = new PacketReceiver(localSocket, loopsPerSecond);
         
-        sendThread = new Thread(packetSender);
-        rcvThread = new Thread(rcvThread);
+        sendThread = new Thread(packetSender, "Packet Sender");
+        rcvThread = new Thread(packetReceiver, "Packet Receiver");
         
         rcvThread.start();
         sendThread.start();
 
+    }
+    
+    
+    protected void sendConnectionPacket(char gameType) {
+        ConnectionPacket data = null;
+        if(gameType == ConnectionPacket.REMOTE) {
+            data = new ConnectionPacket(ConnectionPacket.REMOTE);   
+        } else if (gameType == ConnectionPacket.HOST) {
+            data = new ConnectionPacket(ConnectionPacket.HOST);   
+        }
+        
+        byte buffer[] = data.getByteArray().getRawBuffer();
 
+        DatagramPacket connectionTest = new DatagramPacket(data.getByteArray().getRawBuffer(), data.getByteArray().size(),destIp, destPort);
+        packetSender.sendPacket(connectionTest);
     }
     
 }
