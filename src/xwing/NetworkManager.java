@@ -20,7 +20,7 @@ public class NetworkManager{
     public static void initializeAsRemote() {    
         Thread gameCreator = new Thread() {
             public void run() {     
-                onlineGame = new RemoteGame(13879,   13878,  "192.168.1.107");
+                onlineGame = new RemoteGame(13879,   13878,  "192.168.1.204");
         }};
         gameCreator.start();
     } 

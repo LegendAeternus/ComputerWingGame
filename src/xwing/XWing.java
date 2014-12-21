@@ -22,7 +22,7 @@ public class XWing {
     public static void main(String[] args) throws InterruptedException {
         
         GuiManager.showMainWindow();
-        GameManager.curPhase = GameManager.GamePhase.SquadBuilding;
+        //GameManager.curPhase = GameManager.GamePhase.SquadBuilding;
         
     }
 }

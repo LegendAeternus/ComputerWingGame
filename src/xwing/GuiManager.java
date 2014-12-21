@@ -12,12 +12,12 @@ import javax.swing.JFrame;
  */
 public class GuiManager {
     
-    static XWingGUI mainWindow = new XWingGUI();
+    static XWingGUI mainWindow;//= new XWingGUI();
     
     static void showMainWindow() {
-        XWingGUI window = new XWingGUI();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setVisible(true);
+        mainWindow = new XWingGUI();
+        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow.setVisible(true);     
     }
     
 }
