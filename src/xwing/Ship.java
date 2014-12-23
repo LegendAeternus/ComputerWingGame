@@ -14,6 +14,7 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 
 /**
@@ -25,16 +26,17 @@ public class Ship {
     Point location;
     Double orientation;
     
-    String pilotName;
+    protected Pilot pilot;
+    protected static ArrayList<Pilot> possiblePilots;
     
     boolean secondaryArc;
     boolean turret;
     
     
     double arcWidth;
-    int maxHull, maxShields;
-    int hull, shields;
-    int attack, evade;
+    protected static int baseHull, baseShields;
+    protected int hull, shields;
+    protected static int baseAttack, baseEvade;
     double sideLength;
     
     String upgrades;
@@ -136,12 +138,8 @@ public class Ship {
 
 
         
-        if(pilotName != null) {
-            g2D.setColor(Color.WHITE);
-            g2D.drawString(pilotName, (int)location.x, (int)location.y);
-
-
-        }
+        g2D.setColor(Color.WHITE);
+        g2D.drawString(pilot.getPilotName(), (int)location.x, (int)location.y);
         
         
 
@@ -188,16 +186,53 @@ public class Ship {
     public void drawRange(Graphics g) {
         
         Area firstCorner = new Area();
-        
-        
-        
-        
-        
-        
-        
-        
+
+    }
+
+    public static ArrayList<Pilot> getPossiblePilots() {
+        return possiblePilots;
+    }
+
+    public static int getBaseHull() {
+        return baseHull;
+    }
+
+    public static int getBaseShields() {
+        return baseShields;
+    }
+
+    public int getHull() {
+        return hull;
+    }
+
+    public int getShields() {
+        return shields;
+    }
+
+    public static int getBaseAttack() {
+        return baseAttack;
+    }
+
+    public static int getBaseEvade() {
+        return baseEvade;
+    }
+    
+    public int getPointCost() {
+        if(pilot != null) {
+            return pilot.getPointCost();
+        } else {
+            return -1;
+        }
+    }
+
+    public Pilot getPilot() {
+        return pilot;
+    }
+
+    public void setPilot(Pilot pilot) {
+        this.pilot = pilot;
     }
     
     
-    
+
 }

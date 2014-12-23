@@ -19,7 +19,6 @@ public class MainGameplayPanel extends javax.swing.JPanel {
         
         this.shipList1.form = shipForm1;
         this.gameMap1.l = shipList1;
-        this.shipForm1.l = shipList1;
     }
 
 

@@ -15,7 +15,28 @@ public class Pilot {
     private int initiative;
     
     
-    public Pilot(String pilotName){
+    public Pilot(String pilotName, int pointCost, int initiative){
         this.pilotName = pilotName;
+        this.pointCost = pointCost;
+        this.initiative = initiative;
     }
+
+    public String getPilotName() {
+        return pilotName;
+    }
+
+    public int getPointCost() {
+        return pointCost;
+    }
+
+    public int getInitiative() {
+        return initiative;
+    }
+    
+    public String toString() {
+        return pilotName;
+    }
+    
+    
+    
 }

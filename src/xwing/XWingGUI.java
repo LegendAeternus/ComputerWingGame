@@ -47,9 +47,13 @@ public class XWingGUI extends javax.swing.JFrame {
                     startupMenu.setVisible(true);
                     break;
                 case SquadBuilding:
+                    mainGuiContainer.setLayer(shipBuilderPanel, topLayer);
+                    shipBuilderPanel.setVisible(true);
+                    break;
+                case Movement:
                     mainGuiContainer.setLayer(gameMap, topLayer);
                     gameMap.setVisible(true);
-
+                    break;
                 default:
 
             }    
@@ -60,6 +64,7 @@ public class XWingGUI extends javax.swing.JFrame {
     public static void resetMainGui() {
         for(Component comp: mainGuiContainer.getComponents()) {
             mainGuiContainer.setLayer(comp, 0);
+            //comp.setSize(GuiManager.mainWindow.getWidth(), GuiManager.mainWindow.getHeight());
             comp.setVisible(false);
         }
     }
@@ -92,7 +97,8 @@ public class XWingGUI extends javax.swing.JFrame {
     public void refresh() {
         
         for(Component comp: mainGuiContainer.getComponentsInLayer(topLayer)) {
-            comp.repaint();
+            if(comp.isVisible())
+                comp.repaint();
         }
         
         
@@ -112,6 +118,7 @@ public class XWingGUI extends javax.swing.JFrame {
         mainGuiContainer = new javax.swing.JLayeredPane();
         gameMap = new xwing.MainGameplayPanel();
         startupMenu = new xwing.MainMenuPanel();
+        shipBuilderPanel = new xwing.ShipBuilderPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -119,6 +126,8 @@ public class XWingGUI extends javax.swing.JFrame {
         mainGuiContainer.add(gameMap, javax.swing.JLayeredPane.DEFAULT_LAYER);
         startupMenu.setBounds(0, 0, 1330, 940);
         mainGuiContainer.add(startupMenu, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        shipBuilderPanel.setBounds(0, 0, 1340, 950);
+        mainGuiContainer.add(shipBuilderPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -171,6 +180,7 @@ public class XWingGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static xwing.MainGameplayPanel gameMap;
     private static javax.swing.JLayeredPane mainGuiContainer;
+    private static xwing.ShipBuilderPanel shipBuilderPanel;
     private static xwing.MainMenuPanel startupMenu;
     // End of variables declaration//GEN-END:variables
 }

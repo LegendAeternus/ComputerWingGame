@@ -27,6 +27,10 @@ public class ShipList extends javax.swing.JPanel {
         
     }
     
+    /**
+     *
+     * @param i
+     */
     public void setSelectedIndex(int i) {
         
         jList1.setSelectedIndex(i);
@@ -34,6 +38,9 @@ public class ShipList extends javax.swing.JPanel {
     }
     
     
+    /** Loads the ships from GameManager into the JLists
+     *
+     */
     public void loadList() {
         
         tempSelectedIndex = jList1.getSelectedIndex();
@@ -48,10 +55,10 @@ public class ShipList extends javax.swing.JPanel {
         opponentList.clear();
         
         for(Ship s: GameManager.playerSquadron) {
-            playerList.addElement(s.pilotName);
+            playerList.addElement(s.pilot.getPilotName());
         }
         for(Ship s: GameManager.opponentSquadron) {
-            opponentList.addElement(s.pilotName);
+            opponentList.addElement(s.pilot.getPilotName());
         }
         jList1.setSelectedIndex(tempSelectedIndex);
         tempSelectedIndex = -1;
