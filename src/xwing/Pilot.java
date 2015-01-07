@@ -9,7 +9,7 @@ package xwing;
  *
  * @author Chris
  */
-public class Pilot {
+public class Pilot implements Cloneable {
     private String pilotName;
     private int pointCost;
     private int initiative;
@@ -33,10 +33,15 @@ public class Pilot {
         return initiative;
     }
     
+    @Override
     public String toString() {
         return pilotName;
     }
     
-    
+    @Override
+    public Pilot clone() {
+        Pilot copy = new Pilot(pilotName, pointCost, initiative);     
+        return copy;
+    }
     
 }

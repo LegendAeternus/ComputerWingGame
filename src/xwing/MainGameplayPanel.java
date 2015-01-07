@@ -4,12 +4,15 @@
  */
 package xwing;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author Michael
  */
-public class MainGameplayPanel extends javax.swing.JPanel {
+public class MainGameplayPanel extends javax.swing.JPanel implements Refreshable {
 
+    private boolean wasVisible = false;
 
     /**
      * Creates new form MainGameplayPanel
@@ -17,8 +20,6 @@ public class MainGameplayPanel extends javax.swing.JPanel {
     public MainGameplayPanel () {
         initComponents();
         
-        this.shipList1.form = shipForm1;
-        this.gameMap1.l = shipList1;
     }
 
 
@@ -34,29 +35,19 @@ public class MainGameplayPanel extends javax.swing.JPanel {
 
         MainDisplayPanel = new javax.swing.JPanel();
         manueverDial1 = new xwing.ManueverDial();
-        jButton1 = new javax.swing.JButton();
         gameMap1 = new xwing.GameMap();
         shipList1 = new xwing.ShipList();
         shipForm1 = new xwing.ShipForm();
-
-        jButton1.setText("Start");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout manueverDial1Layout = new javax.swing.GroupLayout(manueverDial1);
         manueverDial1.setLayout(manueverDial1Layout);
         manueverDial1Layout.setHorizontalGroup(
             manueverDial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+            .addGap(0, 260, Short.MAX_VALUE)
         );
         manueverDial1Layout.setVerticalGroup(
             manueverDial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, manueverDial1Layout.createSequentialGroup()
-                .addGap(0, 261, Short.MAX_VALUE)
-                .addComponent(jButton1))
+            .addGap(0, 266, Short.MAX_VALUE)
         );
 
         gameMap1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -94,18 +85,17 @@ public class MainGameplayPanel extends javax.swing.JPanel {
         MainDisplayPanelLayout.setVerticalGroup(
             MainDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainDisplayPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(17, 17, 17)
                 .addGroup(MainDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(MainDisplayPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addComponent(gameMap1, javax.swing.GroupLayout.PREFERRED_SIZE, 907, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(MainDisplayPanelLayout.createSequentialGroup()
                         .addComponent(shipList1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(shipForm1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(manueverDial1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MainDisplayPanelLayout.createSequentialGroup()
-                        .addComponent(gameMap1, javax.swing.GroupLayout.PREFERRED_SIZE, 907, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(manueverDial1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -121,16 +111,33 @@ public class MainGameplayPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        GameManager.curPhase = GameManager.GamePhase.Movement;
-    }//GEN-LAST:event_jButton1MouseClicked
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel MainDisplayPanel;
     private xwing.GameMap gameMap1;
-    private javax.swing.JButton jButton1;
     private xwing.ManueverDial manueverDial1;
     private xwing.ShipForm shipForm1;
     private xwing.ShipList shipList1;
     // End of variables declaration//GEN-END:variables
+
+    
+    @Override
+    public void refresh() {
+        
+        if(GameManager.squadChanged) {
+            
+            shipList1.loadList();
+            GameManager.squadChanged = false;
+        }
+        
+        if(shipList1.selectionChanged) {
+            Ship selected = shipList1.getSelectedShip();
+            if(selected != null) {
+                shipForm1.loadShip(selected);
+            }
+            shipList1.selectionChanged = false;
+        }
+       
+        this.gameMap1.repaint();
+
+    }
 }

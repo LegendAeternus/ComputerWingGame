@@ -12,8 +12,8 @@ public class NetworkManager{
     
     static NetworkedGame onlineGame;
     
-    static boolean isHost = false;
-    static boolean connected = false;
+    private static boolean isHost = false;
+    private static boolean connected = false;
 
     
     
@@ -21,6 +21,8 @@ public class NetworkManager{
         Thread gameCreator = new Thread() {
             public void run() {     
                 onlineGame = new RemoteGame(13879,   13878,  "192.168.1.204");
+                connected = true;
+                isHost = true;
         }};
         gameCreator.start();
     } 
@@ -29,8 +31,18 @@ public class NetworkManager{
         Thread gameCreator = new Thread() {
             public void run() {     
                 onlineGame = new HostGame(13878,   13879);
+                connected = true;
+                isHost = false;
         }};
         gameCreator.start();
     } 
+    
+    static public boolean isHost() {
+        return isHost;
+    }
+    
+    static public boolean isOnlineGame() {
+        return connected;
+    }
     
 }

@@ -7,6 +7,8 @@ package xwing;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 
+
+
 /**
  *
  * @author Michael
@@ -14,7 +16,8 @@ import java.util.ArrayList;
 public class ShipForm extends javax.swing.JPanel {
 
 Ship local;
-    
+private boolean editable = true;
+
     
     /**
      * Creates new form ShipForm
@@ -375,7 +378,7 @@ Ship local;
     }// </editor-fold>//GEN-END:initComponents
 
     private void shipTypeComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_shipTypeComboItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
+        if (evt.getStateChange() == ItemEvent.SELECTED && editable) {
             String ship = (String)evt.getItem();
             
             switch(ship) {
@@ -393,7 +396,15 @@ Ship local;
                     loadPilotOptions(TieFighter.getPossiblePilots());
                     break;  
                 
-                
+                case "Firespray-31":
+                    local = new Firespray31(0,0,0,0);
+                    
+                    this.hullText.setText(new Integer(Firespray31.getBaseHull()).toString());
+                    this.shieldsText.setText(new Integer(Firespray31.getBaseShields()).toString());
+                    this.attackText.setText(new Integer(Firespray31.getBaseAttack()).toString());
+                    this.evadeText.setText(new Integer(Firespray31.getBaseEvade()).toString());
+                    loadPilotOptions(Firespray31.getPossiblePilots());
+                    break;  
                 
             }
             
@@ -402,9 +413,9 @@ Ship local;
     }//GEN-LAST:event_shipTypeComboItemStateChanged
 
     private void pilotNameComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_pilotNameComboItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
+        if (evt.getStateChange() == ItemEvent.SELECTED && editable) {
             Pilot pilot = (Pilot)evt.getItem();
-            local.setPilot(pilot);
+            local.setPilot(pilot.clone());
         }
     }//GEN-LAST:event_pilotNameComboItemStateChanged
 
@@ -413,7 +424,7 @@ Ship local;
     }//GEN-LAST:event_shipTypeCombo1ItemStateChanged
 
     private void pilotNameCombo1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_pilotNameCombo1ItemStateChanged
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_pilotNameCombo1ItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -451,8 +462,9 @@ Ship local;
     private javax.swing.JComboBox shipTypeCombo;
     private javax.swing.JComboBox shipTypeCombo1;
     // End of variables declaration//GEN-END:variables
-    public void loadShip(Ship s) {
-     
+    public void loadShipForEdit(Ship s) {
+        setEditable(true);
+        
         local = s;
         
         this.hullText.setText((new Integer(s.hull)).toString());
@@ -461,6 +473,36 @@ Ship local;
         this.evadeText.setText((new Integer(s.baseEvade).toString()));
         
     }
+    
+    public void loadShip(Ship s) {
+        setEditable(false);
+        System.out.println("Loading Ship " + s.hull);
+        
+        local = s;
+        
+        this.hullText.setText((new Integer(s.hull)).toString());
+        this.shieldsText.setText(new Integer(s.shields).toString());
+        this.attackText.setText(new Integer(s.baseAttack).toString());
+        this.evadeText.setText((new Integer(s.baseEvade).toString()));
+        
+        shipTypeCombo.removeAllItems();
+        shipTypeCombo.addItem(local.ShipName);
+        
+        pilotNameCombo.removeAllItems();
+        pilotNameCombo.addItem(local.getPilot());
+        
+    }
+    
+    
+    public void setEditable(boolean editable) {
+        
+        shipTypeCombo.setEnabled(editable);
+        pilotNameCombo.setEnabled(editable);
+        this.editable = editable;
+            
+    }
+    
+    
     public Ship getShip() {
         
         return local;
@@ -484,7 +526,7 @@ Ship local;
         shipTypeCombo.addItem("TIE Fighter");
         shipTypeCombo.addItem("TIE Advanced");
         shipTypeCombo.addItem("TIE Interceptor");
-        shipTypeCombo.addItem("Slave 1");
+        shipTypeCombo.addItem("Firespray-31");
         shipTypeCombo.addItem("Lambda-class Shuttle");
         shipTypeCombo.addItem("TIE Bomber");
         shipTypeCombo.addItem("TIE Phantom");

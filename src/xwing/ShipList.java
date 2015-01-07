@@ -16,6 +16,12 @@ import javax.swing.DefaultListModel;
 public class ShipList extends javax.swing.JPanel {
 
     int tempSelectedIndex = -1;
+    int selectedIndex = -1;
+    int selectedTeam = 0;
+    
+    boolean selectionChanged;
+ 
+    
     ShipForm form;
 
     /**
@@ -33,7 +39,7 @@ public class ShipList extends javax.swing.JPanel {
      */
     public void setSelectedIndex(int i) {
         
-        jList1.setSelectedIndex(i);
+        playerSquad.setSelectedIndex(i);
         
     }
     
@@ -43,13 +49,13 @@ public class ShipList extends javax.swing.JPanel {
      */
     public void loadList() {
         
-        tempSelectedIndex = jList1.getSelectedIndex();
+        tempSelectedIndex = playerSquad.getSelectedIndex();
         
         DefaultListModel playerList = new DefaultListModel();
-        this.jList1.setModel(playerList);
+        this.playerSquad.setModel(playerList);
         
         DefaultListModel opponentList = new DefaultListModel();
-        this.jList2.setModel(opponentList);
+        this.opponenetSquad.setModel(opponentList);
         
         playerList.clear();
         opponentList.clear();
@@ -60,7 +66,7 @@ public class ShipList extends javax.swing.JPanel {
         for(Ship s: GameManager.opponentSquadron) {
             opponentList.addElement(s.pilot.getPilotName());
         }
-        jList1.setSelectedIndex(tempSelectedIndex);
+        playerSquad.setSelectedIndex(tempSelectedIndex);
         tempSelectedIndex = -1;
         
     }
@@ -77,36 +83,41 @@ public class ShipList extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        playerSquad = new javax.swing.JList();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        opponenetSquad = new javax.swing.JList();
         jLabel2 = new javax.swing.JLabel();
 
-        jList1.setModel(new javax.swing.DefaultListModel() {
+        playerSquad.setModel(new javax.swing.DefaultListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        playerSquad.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jList1ValueChanged(evt);
+                playerSquadValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(playerSquad);
 
         jSeparator1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Player Squad");
 
-        jList2.setModel(new javax.swing.DefaultListModel() {
+        opponenetSquad.setModel(new javax.swing.DefaultListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList2);
+        opponenetSquad.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                opponenetSquadValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(opponenetSquad);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Opponent Squad");
@@ -141,23 +152,43 @@ public class ShipList extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        if(tempSelectedIndex != -1)
-            return;
-        System.out.println(jList1.getSelectedIndex());
-        if(jList1.getSelectedIndex() >=-1 && jList1.getSelectedIndex() < GameManager.playerSquadron.size()) {
-            GameManager.listSelectedShip = GameManager.playerSquadron.get(jList1.getSelectedIndex());
-            form.loadShip(GameManager.listSelectedShip);
-        }
-    }//GEN-LAST:event_jList1ValueChanged
+    public Ship getSelectedShip() {
+        if(selectedIndex < 0)
+            return null;
+        
+        if (selectedTeam ==0) {
+            return GameManager.playerSquadron.get(selectedIndex);
+        } else if (selectedTeam == 1) {
+            return GameManager.opponentSquadron.get(selectedIndex);
+        } else {
+            return null;
+        }   
+    }
+    
+    
+    private void playerSquadValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_playerSquadValueChanged
+        System.out.println("Selected PLayer");
+        selectionChanged = true;
+        selectedTeam = 0;
+        selectedIndex = evt.getFirstIndex();                
+        opponenetSquad.clearSelection();
+    }//GEN-LAST:event_playerSquadValueChanged
+
+    private void opponenetSquadValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_opponenetSquadValueChanged
+        System.out.println("Selected OPP");
+        selectionChanged = true;
+        selectedTeam = 1;
+        selectedIndex = evt.getFirstIndex();
+        playerSquad.clearSelection();
+    }//GEN-LAST:event_opponenetSquadValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JList opponenetSquad;
+    private javax.swing.JList playerSquad;
     // End of variables declaration//GEN-END:variables
 }

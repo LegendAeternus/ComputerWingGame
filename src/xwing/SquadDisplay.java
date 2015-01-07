@@ -19,7 +19,6 @@ public class SquadDisplay extends javax.swing.JPanel {
     
     
     private ArrayList<ShipForm> shipForms = new ArrayList<>();
-    private ArrayList<Ship> squad = new ArrayList<>();
     boolean shipsChanged = false;
     
     /**Used to get the list of ships that this squadDisplay is showing
@@ -27,13 +26,22 @@ public class SquadDisplay extends javax.swing.JPanel {
      * @return An ArrayList containing the ships this squad display is showing
      */
     public ArrayList<Ship> getShips() {
+        ArrayList<Ship> squad = new ArrayList<>();
+        for(ShipForm form: shipForms) {
+            squad.add(form.local);
+        }
         return squad;
     }
     public void addShip(Ship s) {
-        squad.add(s);
+        ShipForm newForm = new ShipForm();
+        newForm.loadShipForEdit(s);
+        shipForms.add(newForm);
+        newForm.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        shipFormsPanel.add(newForm);
     }
     public void clearShips() {
-        squad.clear();
+        shipFormsPanel.removeAll();
+        shipForms.clear();
     }
     
     
@@ -42,35 +50,9 @@ public class SquadDisplay extends javax.swing.JPanel {
      * are no longer have a corresponding ship, and adding new forms for new ships
      */
     public void updateShipForms() {
-        int shipHasForm[] = new int[squad.size()];
-        
-        for(ShipForm form: shipForms) {
-            int i=squad.indexOf(form.getShip());
-            
-            if(i>=0) {
-                shipHasForm[i] = 1;
-            } else {
-                shipForms.remove(form);
-            }
-        }
-        
-        for(int i=0; i<shipHasForm.length; i++) {
-            if(shipHasForm[i]!=1) {
-                ShipForm newForm = new ShipForm();
-                newForm.loadShip(squad.get(i));
-                shipForms.add(i, newForm);
-            }
-        }
-        
-        ships.removeAll();
-        for(ShipForm form: shipForms) {
-            form.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-            ships.add(form);
-        }
-        
-        
-        System.out.println("Ships = " + squad.size() + "  Forms " + shipForms.size());
+
         updateComponentSizes();
+       
         
     }
     
@@ -90,8 +72,8 @@ public class SquadDisplay extends javax.swing.JPanel {
             height = shipForms.get(0).getHeight();
         }
         
-        System.out.println("Width and Height = "+ width + "  " + height);
-        ships.setPreferredSize(new Dimension(width,height));
+        //System.out.println("Width and Height = "+ width + "  " + height);
+        shipFormsPanel.setPreferredSize(new Dimension(width,height));
          
     }
     
@@ -119,7 +101,7 @@ public class SquadDisplay extends javax.swing.JPanel {
         WrapLayout layout = new WrapLayout();
         layout.setHgap(10);
         layout.setAlignment(WrapLayout.LEFT);
-        ships.setLayout(layout);
+        shipFormsPanel.setLayout(layout);
         
     }
 
@@ -133,10 +115,10 @@ public class SquadDisplay extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        ships = new javax.swing.JPanel();
+        shipFormsPanel = new javax.swing.JPanel();
 
         jScrollPane1.setBorder(null);
-        jScrollPane1.setViewportView(ships);
+        jScrollPane1.setViewportView(shipFormsPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -151,6 +133,6 @@ public class SquadDisplay extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel ships;
+    private javax.swing.JPanel shipFormsPanel;
     // End of variables declaration//GEN-END:variables
 }

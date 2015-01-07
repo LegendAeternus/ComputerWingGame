@@ -40,6 +40,7 @@ public class Ship {
     double sideLength;
     
     String upgrades;
+    String ShipName = "No Name";
     
     int team;
     
@@ -47,8 +48,6 @@ public class Ship {
     // Render Vars
     //=================
     boolean showRange;
-    
-    
     Rectangle2D.Double base = new Rectangle2D.Double();
     Shape baseDraw;
     
@@ -58,7 +57,8 @@ public class Ship {
         sideLength = length;
         this.arcWidth = arcWidth;
         this.team = team;
-        
+        hull = this.getBaseHull();
+        shields = this.getBaseShields();
         updateRect();
         
     }
@@ -95,7 +95,7 @@ public class Ship {
     
     public boolean checkForShipCollision() {
         
-        for(Ship s: GameManager.getShips()) {
+        for(Ship s: GameManager.getAllShips()) {
             if(!s.equals(this)) {
                 Area s1 = new Area(baseDraw);
                 Area s2 = new Area(s.baseDraw);
@@ -233,6 +233,14 @@ public class Ship {
         this.pilot = pilot;
     }
     
+    void initialize() {
+        hull = getBaseHull();
+        shields = getBaseShields();
+
+    }
     
+    public Point getLocation() {
+        return location;
+    }
 
 }

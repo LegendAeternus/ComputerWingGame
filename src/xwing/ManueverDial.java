@@ -142,8 +142,17 @@ public class ManueverDial extends javax.swing.JPanel {
             m.kTurn = true;
         }
         
+        
         if(null!=GameManager.selectedShip) {
             GameManager.ManueverToExecute = m;
+            
+            final Manuever mThread = m;
+            Thread gameCreator = new Thread() {
+            public void run() {     
+                mThread.apply(GameManager.selectedShip);
+            }};
+            gameCreator.start();
+            System.out.println("applied maneuver");
         }
         
         

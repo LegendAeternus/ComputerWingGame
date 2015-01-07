@@ -14,8 +14,11 @@ import javax.swing.border.EtchedBorder;
  *
  * @author Michael
  */
-public class ShipBuilderPanel extends javax.swing.JPanel {
+public class ShipBuilderPanel extends javax.swing.JPanel implements Refreshable {
 
+    private boolean playerSquadFinalized;
+    private boolean opponentSquadFinalized;
+    
     /**
      * Creates new form ShipBuilderPanel
      */
@@ -24,11 +27,19 @@ public class ShipBuilderPanel extends javax.swing.JPanel {
     }
 
     
-    @Override
-    public void paintComponent(Graphics g) {
+    public void refresh() {
         
+        if(NetworkManager.isOnlineGame()) {
+            addOpponentShipButton.setVisible(false);
+            opponentSquadPointsUsed.setVisible(false);
+            finalizeSquadButton1.setVisible(false);
+            this.jPanel3.setVisible(false);
+        }
         int points = playerSquad.getSquadPointsUsed();
         squadPointsUsed.setText(new Integer(points).toString());
+        
+        int points2 = opponentSquad.getSquadPointsUsed();
+        opponentSquadPointsUsed.setText(new Integer(points2).toString());
         
         
     }
@@ -47,11 +58,14 @@ public class ShipBuilderPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        opponentSquadPointsUsed = new javax.swing.JTextField();
         addShipButton = new javax.swing.JButton();
         finalizeSquadButton = new javax.swing.JButton();
         addOpponentShipButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         squadPointsUsed = new javax.swing.JTextField();
+        finalizeSquadButton1 = new javax.swing.JButton();
         ShipsDisplay = new javax.swing.JPanel();
         opponentSquad = new xwing.SquadDisplay();
         playerSquad = new xwing.SquadDisplay();
@@ -61,6 +75,26 @@ public class ShipBuilderPanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(600, 427));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Squad Points", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        opponentSquadPointsUsed.setEditable(false);
+        opponentSquadPointsUsed.setFont(new java.awt.Font("Verdana", 1, 36)); // NOI18N
+        opponentSquadPointsUsed.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        opponentSquadPointsUsed.setText("100");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(opponentSquadPointsUsed)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(opponentSquadPointsUsed)
+                .addContainerGap())
+        );
 
         addShipButton.setText("Add New Ship");
         addShipButton.addActionListener(new java.awt.event.ActionListener() {
@@ -94,32 +128,50 @@ public class ShipBuilderPanel extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(squadPointsUsed)
+            .addComponent(squadPointsUsed, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(squadPointsUsed, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
         );
 
+        finalizeSquadButton1.setText("Finalize Squad");
+        finalizeSquadButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                finalizeSquadButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(finalizeSquadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(addShipButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(addOpponentShipButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addShipButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(finalizeSquadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addOpponentShipButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(finalizeSquadButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(addOpponentShipButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(finalizeSquadButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
                 .addComponent(addShipButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(finalizeSquadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(finalizeSquadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel2.getAccessibleContext().setAccessibleName("Points Left");
@@ -143,7 +195,7 @@ public class ShipBuilderPanel extends javax.swing.JPanel {
             .addGroup(ShipsDisplayLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ShipsDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(playerSquad, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+                    .addComponent(playerSquad, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                     .addComponent(opponentSquad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
         ShipsDisplayLayout.setVerticalGroup(
@@ -195,18 +247,41 @@ public class ShipBuilderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addOpponentShipButtonActionPerformed
 
     private void finalizeSquadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizeSquadButtonActionPerformed
-        GameManager.curPhase = GameManager.GamePhase.Movement;
+        playerSquadFinalized = true;
+        finalizeSquadButton.setEnabled(false);
+        addShipButton.setEnabled(false);
+        if(opponentSquadFinalized) {
+            GameManager.playerSquadron = playerSquad.getShips();
+            GameManager.opponentSquadron = opponentSquad.getShips();
+            GameManager.curPhase = GameManager.GamePhase.SquadPlacement;
+        }
     }//GEN-LAST:event_finalizeSquadButtonActionPerformed
+
+    private void finalizeSquadButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizeSquadButton1ActionPerformed
+        opponentSquadFinalized = true;
+        finalizeSquadButton1.setEnabled(false);
+        addOpponentShipButton.setEnabled(false);
+        if(playerSquadFinalized) {
+            GameManager.playerSquadron = playerSquad.getShips();
+            GameManager.opponentSquadron = opponentSquad.getShips();
+            GameManager.curPhase = GameManager.GamePhase.SquadPlacement;
+        }
+    }//GEN-LAST:event_finalizeSquadButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ShipsDisplay;
     private javax.swing.JButton addOpponentShipButton;
     private javax.swing.JButton addShipButton;
     private javax.swing.JButton finalizeSquadButton;
+    private javax.swing.JButton finalizeSquadButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private xwing.SquadDisplay opponentSquad;
+    private javax.swing.JTextField opponentSquadPointsUsed;
     private xwing.SquadDisplay playerSquad;
     private javax.swing.JTextField squadPointsUsed;
     // End of variables declaration//GEN-END:variables
+
+
 }

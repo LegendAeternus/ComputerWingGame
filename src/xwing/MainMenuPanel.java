@@ -13,7 +13,7 @@ import java.net.InetAddress;
  *
  * @author Michael
  */
-public class MainMenuPanel extends javax.swing.JPanel {
+public class MainMenuPanel extends javax.swing.JPanel implements Refreshable{
 
 
     /**
@@ -39,6 +39,11 @@ public class MainMenuPanel extends javax.swing.JPanel {
         HostGameButton = new javax.swing.JButton();
 
         jButton1.setText("Single Player");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         ConnectToHostButton.setText("Connect To Game");
         ConnectToHostButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -88,9 +93,18 @@ public class MainMenuPanel extends javax.swing.JPanel {
         NetworkManager.initializeAsHost();
     }//GEN-LAST:event_HostGameButtonMouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        GameManager.curPhase = GameManager.GamePhase.SquadBuilding;
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ConnectToHostButton;
     private javax.swing.JButton HostGameButton;
     private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void refresh() {
+        //System.out.println("Main Menu Refresh");
+    }
 }

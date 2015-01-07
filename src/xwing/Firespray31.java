@@ -11,40 +11,44 @@ import java.util.ArrayList;
  *
  * @author Chris
  */
-public class TieFighter extends NormalShip {
+public class Firespray31 extends LargeShip {
     
     
-    public TieFighter(double Xmm, double Ymm, double orientDeg, int team) {
+    public Firespray31(double Xmm, double Ymm, double orientDeg, int team) {
         super(Xmm, Ymm, orientDeg, team);
-        ShipName = "TIE Fighter";
+        ShipName = "Firespray-31";
+        secondaryArc = true;
     }
     
     public static ArrayList<Pilot> getPossiblePilots() {
         
         possiblePilots = new ArrayList<>();
-        possiblePilots.add(new Pilot("Academy Pilot",12,1));
-        possiblePilots.add(new Pilot("Obsidian Squadron Pilot",13,3));
+        possiblePilots.add(new Pilot("Boba Fett",39,8));
+        possiblePilots.add(new Pilot("Kath Scarlett",38,7));
+        possiblePilots.add(new Pilot("Krassis Trelix",36,5));
+        possiblePilots.add(new Pilot("Bounty Hunter",33,3));
+
         return possiblePilots;
         
     }
     
     public static int getBaseHull() {
-        baseHull = 3;
+        baseHull = 6;
         return baseHull;
     }
 
     public static int getBaseShields() {
-        baseShields = 0;
+        baseShields = 4;
         return baseShields;
     }
 
     public static int getBaseAttack() {
-        baseAttack = 2;
+        baseAttack = 3;
         return baseAttack;
     }
 
     public static int getBaseEvade() {
-        baseEvade = 3;
+        baseEvade = 2;
         return baseEvade;
     }
     

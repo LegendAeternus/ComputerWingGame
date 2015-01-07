@@ -16,7 +16,7 @@ import javax.swing.JLayeredPane;
  *
  * @author Michael
  */
-public class XWingGUI extends javax.swing.JFrame {
+public class XWingGUI extends javax.swing.JFrame implements Refreshable {
 
     final static int topLayer = 5;
     static GameManager.GamePhase curPhase;
@@ -49,6 +49,11 @@ public class XWingGUI extends javax.swing.JFrame {
                 case SquadBuilding:
                     mainGuiContainer.setLayer(shipBuilderPanel, topLayer);
                     shipBuilderPanel.setVisible(true);
+                    break;
+                 case SquadPlacement:
+                    GameManager.resetShips();
+                    mainGuiContainer.setLayer(gameMap, topLayer);
+                    gameMap.setVisible(true);
                     break;
                 case Movement:
                     mainGuiContainer.setLayer(gameMap, topLayer);
@@ -98,7 +103,7 @@ public class XWingGUI extends javax.swing.JFrame {
         
         for(Component comp: mainGuiContainer.getComponentsInLayer(topLayer)) {
             if(comp.isVisible())
-                comp.repaint();
+                ((Refreshable)comp).refresh();
         }
         
         

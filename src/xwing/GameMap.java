@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
+import java.awt.event.MouseEvent;
 import static xwing.GameManager.GamePhase.SquadBuilding;
 
 /**
@@ -24,7 +25,7 @@ public class GameMap extends javax.swing.JPanel {
     
     Ship newShip;
     Point pref;
-    
+    boolean placed = false;
     
     ArrayList<Ship> ships = new ArrayList<>();
     
@@ -46,10 +47,9 @@ public class GameMap extends javax.swing.JPanel {
            area.draw(g);
        }
        
-       for(Ship s: GameManager.getShips()) {
+       for(Ship s: GameManager.getAllShips()) {
            s.draw(g);
        }
-       
 
 
     }
@@ -105,7 +105,7 @@ public class GameMap extends javax.swing.JPanel {
             case SquadBuilding:
                 break;
             case Movement:
-                for(Ship s: GameManager.playerSquadron) {
+                for(Ship s: GameManager.getAllShips()) {
                     if (s.baseDraw.contains(point)) {
                         GameManager.selectedShip = s;
                         return;
@@ -129,12 +129,10 @@ public class GameMap extends javax.swing.JPanel {
         switch(GameManager.curPhase) {
             
             case SquadBuilding:
-                newShip = new LargeShip((double)evt.getX(),(double)evt.getY(),0,1);
-                GameManager.addShip(newShip);
-                newShip.orientation = 95d;
-                pref = new Point(evt.getX(),evt.getY());
                 break;
-            case Movement:
+            case SquadPlacement:
+                pref = new Point(evt.getX(), evt.getY());
+                break;
             default:
                 break;
         }
@@ -143,10 +141,23 @@ public class GameMap extends javax.swing.JPanel {
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         switch(GameManager.curPhase) {
-            
-            case SquadBuilding:
+            case SquadPlacement:
                 System.out.println("Dragged");
-                if(newShip!=null) {
+                
+                if(newShip == null) {
+                    newShip = GameManager.getLowestUnplacedShip();
+                    if(newShip == null) {
+                        GameManager.curPhase = GameManager.GamePhase.Movement;
+                        placed = false;
+                        break;
+                    }
+                }
+                
+                
+                if(!placed) {
+                    newShip.setLocation(new Point(evt.getX(), evt.getY()));
+                }
+                else {
                     Point cur = new Point(evt.getX(),evt.getY());
                     Point diff = cur.subtract(pref);
                     double orient = Math.toDegrees(Math.atan2(diff.y, diff.x));
@@ -165,10 +176,24 @@ public class GameMap extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        System.out.println(newShip.orientation);
-        l.loadList();
-        l.setSelectedIndex(GameManager.playerSquadron.indexOf(newShip));
-        newShip = null;
+        switch(GameManager.curPhase) {
+            case SquadPlacement:
+                if(placed) {
+                    System.out.println(newShip.orientation);
+                    newShip = null;
+                    placed = false;
+                } else {
+                    System.out.println("Placed");
+                    placed = true;
+                }
+                
+                break;
+            case Movement:
+            default:
+                break;
+        }
+        
+       
     }//GEN-LAST:event_formMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
