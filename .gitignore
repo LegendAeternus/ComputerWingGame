@@ -1,2 +1,5 @@
 /dist/
 *.class
+nbproject/private/profiler/configurations.xml
+build/built-jar.properties
+nbproject/private/private.properties
